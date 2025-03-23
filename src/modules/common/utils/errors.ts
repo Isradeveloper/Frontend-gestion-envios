@@ -104,16 +104,11 @@ interface onErrorProps {
   dispatch: AppDispatch;
   error: unknown;
   setValidationErrors?: (errors: Record<string, string[]>) => void;
-  setErrors?: setErrors;
+  setErrors?: SetErrors;
 }
 
-export interface setErrors {
-  (
-    errors: FormikErrors<{
-      email: string;
-      password: string;
-    }>
-  ): void;
+export interface SetErrors {
+  (errors: FormikErrors<Record<string, string[]>>): void;
 }
 
 export const onError = ({

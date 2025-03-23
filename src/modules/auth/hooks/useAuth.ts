@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
 import { login, logout } from "../authSlice";
-import { onError, setErrors } from "../../common/utils";
+import { onError, SetErrors } from "../../common/utils";
 import {
   showBackdrop,
   hideBackdrop,
@@ -32,7 +32,7 @@ export const useAuth = () => {
   const handleAuthProcess = async (
     authFunction: () => Promise<User | undefined>,
     successMessage: string,
-    setErrors?: setErrors
+    setErrors?: SetErrors
   ) => {
     try {
       dispatch(showBackdrop());
@@ -55,7 +55,7 @@ export const useAuth = () => {
 
   const loginUser = async (
     { email, password }: LoginUser,
-    setErrors?: setErrors
+    setErrors?: SetErrors
   ) => {
     return handleAuthProcess(
       () => authService.login(email, password),
@@ -66,7 +66,7 @@ export const useAuth = () => {
 
   const registerUser = async (
     { name, email, password }: RegisterUser,
-    setErrors?: setErrors
+    setErrors?: SetErrors
   ) => {
     return handleAuthProcess(
       () => authService.register(name, email, password),

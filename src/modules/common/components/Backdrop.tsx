@@ -12,7 +12,7 @@ export const CustomBackdrop = () => {
 
   return (
     <Backdrop
-      sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+      sx={(theme) => ({ color: "#fff", zIndex: 99999 })}
       open={open}
       onClick={() => dispatch(hideBackdrop())}
     >

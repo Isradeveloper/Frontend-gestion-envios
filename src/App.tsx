@@ -4,6 +4,7 @@ import DashboardLayoutBasic from "./modules/common/layouts/Dashboard";
 import { useSelector } from "react-redux";
 import { AuthState } from "./modules/auth/authSlice";
 import { JSX } from "react";
+import EnviosList from "./modules/envios/pages/EnviosList";
 
 // Redirige a home si el usuario ya está autenticado
 const AuthRedirect = ({ children }: { children: JSX.Element }) => {
@@ -26,7 +27,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 function App() {
   return (
     <Routes>
-      {/* Rutas de autenticación protegidas para usuarios autenticados */}
+      {/* Rutas de autenticación protegidas */}
       {authRoutes.map(({ path, element }) => (
         <Route
           key={path}
@@ -35,7 +36,7 @@ function App() {
         />
       ))}
 
-      {/* Ruta protegida para el dashboard */}
+      {/* Rutas dentro del Dashboard */}
       <Route
         path="/"
         element={
@@ -43,8 +44,12 @@ function App() {
             <DashboardLayoutBasic />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<EnviosList />} />
+        <Route path="envios" element={<EnviosList />} />
+      </Route>
 
+      {/* Redirigir rutas desconocidas a login */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );

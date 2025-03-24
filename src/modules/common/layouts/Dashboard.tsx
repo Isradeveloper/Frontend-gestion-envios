@@ -1,7 +1,4 @@
 import { extendTheme } from "@mui/material/styles";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import DescriptionIcon from "@mui/icons-material/Description";
-import LayersIcon from "@mui/icons-material/Layers";
 import { AppProvider, Navigation } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
@@ -10,11 +7,24 @@ import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
-const NAVIGATION: Navigation = [
+import { useAuth } from "../../auth/hooks/useAuth";
+import Logout from "@mui/icons-material/Logout";
+
+const COMMON = [
   {
-    segment: "envios",
-    title: "Envíos",
-    icon: <EmailIcon />,
+    segment: "logout",
+    title: "Cerrar sesión",
+    icon: <Logout />,
+  },
+];
+
+const NAVIGATION_ADMIN: Navigation = [
+  {
+    kind: "divider",
+  },
+  {
+    kind: "header",
+    title: "Administrador",
   },
   {
     segment: "transportistas",
@@ -31,34 +41,25 @@ const NAVIGATION: Navigation = [
     title: "Vehículos",
     icon: <AirportShuttleIcon />,
   },
+];
+
+const NAVIGATION_CLIENT: Navigation = [
   {
     kind: "divider",
   },
   {
     kind: "header",
-    title: "Analytics",
+    title: "Cliente",
   },
   {
-    segment: "reports",
-    title: "Reports",
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: "sales",
-        title: "Sales",
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: "traffic",
-        title: "Traffic",
-        icon: <DescriptionIcon />,
-      },
-    ],
+    segment: "envios",
+    title: "Envíos",
+    icon: <EmailIcon />,
   },
   {
-    segment: "integrations",
-    title: "Integrations",
-    icon: <LayersIcon />,
+    segment: "rastreo",
+    title: "Rastreo de envíos",
+    icon: <EmailIcon />,
   },
 ];
 
@@ -77,9 +78,15 @@ const demoTheme = extendTheme({
 });
 
 export default function DashboardLayoutBasic() {
+  const { user } = useAuth();
+
   return (
     <AppProvider
-      navigation={NAVIGATION}
+      navigation={
+        user?.role === "cliente"
+          ? [...COMMON, ...NAVIGATION_CLIENT]
+          : [...COMMON, ...NAVIGATION_ADMIN, ...NAVIGATION_CLIENT]
+      }
       theme={demoTheme}
       branding={{
         logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,

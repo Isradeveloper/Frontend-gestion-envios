@@ -1,8 +1,8 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
-import { login, logout } from "../authSlice";
+import { AuthState, login, logout } from "../authSlice";
 import { onError, SetErrors } from "../../common/utils";
 import {
   showBackdrop,
@@ -29,6 +29,7 @@ export const useAuth = () => {
     Record<string, string[]>
   >({});
 
+  const { user } = useSelector((state: { auth: AuthState }) => state.auth);
   const handleAuthProcess = async (
     authFunction: () => Promise<User | undefined>,
     successMessage: string,
@@ -80,5 +81,5 @@ export const useAuth = () => {
     navigate("/login", { replace: true });
   };
 
-  return { loginUser, registerUser, logoutUser, validationErrors };
+  return { loginUser, registerUser, logoutUser, validationErrors, user };
 };

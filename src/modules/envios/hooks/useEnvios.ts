@@ -5,6 +5,7 @@ import {
   EnviosState,
   setEnvios,
   setEstados,
+  setEstadosPorCode,
   setSelected,
 } from "../enviosSlice";
 import { onError, SetErrors } from "../../common/utils";
@@ -88,7 +89,7 @@ export const useEnvios = () => {
     Record<string, string[]>
   >({});
 
-  const { envios, total, estados, selected } = useSelector(
+  const { envios, total, estados, selected, estadosPorCode } = useSelector(
     (state: { envios: EnviosState }) => state.envios
   );
 
@@ -109,12 +110,6 @@ export const useEnvios = () => {
           envios: response.items,
           total: response.total,
           params,
-        })
-      );
-      dispatch(
-        showAlert({
-          message: "Envíos obtenidos exitosamente",
-          severity: "success",
         })
       );
 
@@ -200,8 +195,9 @@ export const useEnvios = () => {
 
       dispatch(
         showAlert({
-          message: "Envío creado exitosamente",
+          message: `Envío creado exitosamente tu codigo de seguimiento es ${response.codigo} `,
           severity: "success",
+          duration: 10000,
         })
       );
 
@@ -248,6 +244,34 @@ export const useEnvios = () => {
     }
   };
 
+  const getEstadosPorCode = async (codigo: string) => {
+    try {
+      dispatch(showBackdrop());
+      const estados = await enviosService.getEstadosByCode(codigo);
+      if (!estados) {
+        throw new Error("No se pudieron obtener los estados.");
+      }
+      dispatch(setEstadosPorCode({ code: codigo, estados }));
+
+      dispatch(
+        showAlert({
+          message: `Historial para el envío ${codigo} obtenido exitosamente`,
+          severity: "success",
+        })
+      );
+
+      return estados;
+    } catch (err) {
+      onError({
+        dispatch,
+        error: err,
+        setValidationErrors,
+      });
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
+
   return {
     validationErrors,
     envios,
@@ -256,6 +280,7 @@ export const useEnvios = () => {
     values,
     estados,
     selected,
+    estadosPorCode,
     setParams,
     setValues,
     getEnvios,
@@ -269,5 +294,6 @@ export const useEnvios = () => {
     getEstados,
     asignarRuta,
     asignarSeleccionados,
+    getEstadosPorCode,
   };
 };

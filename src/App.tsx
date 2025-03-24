@@ -8,6 +8,8 @@ import { EnviosPage } from "./modules/envios/pages/EnviosPage";
 import { TransportistasPage } from "./modules/transportistas/pages/TransportistasPage";
 import { VehiculosPage } from "./modules/vehiculos/pages/VehiculosPage";
 import { RutasPage } from "./modules/rutas/pages/RutasPage";
+import Logout from "./modules/auth/pages/Logout";
+import RastreoEnvio from "./modules/envios/pages/RastreoEnvio";
 
 // Redirige a home si el usuario ya está autenticado
 const AuthRedirect = ({ children }: { children: JSX.Element }) => {
@@ -53,6 +55,8 @@ function App() {
         <Route path="transportistas" element={<TransportistasPage />} />
         <Route path="vehiculos" element={<VehiculosPage />} />
         <Route path="rutas" element={<RutasPage />} />
+        <Route path="rastreo" element={<RastreoEnvio />} />
+        <Route path="logout" element={<Logout />} />
       </Route>
 
       {/* Redirigir rutas desconocidas a login */}

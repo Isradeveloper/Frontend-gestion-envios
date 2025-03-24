@@ -48,6 +48,13 @@ export interface EnvioUser {
   email: string;
 }
 
+export interface EstadoEnvio {
+  id: number;
+  estado: string;
+  fecha: Date;
+  direccion: string;
+}
+
 export class Envio {
   constructor(
     public readonly id: number,

@@ -29,7 +29,7 @@ apiToken.interceptors.response.use(
         const user = getLocalStorage<User>("user");
         const response = await axios.post(
           "http://localhost:3000/api/auth/refresh-token",
-          { refreshToken: user?.token }
+          { refreshToken: user?.refreshToken }
         );
         if (response.status === 200) {
           // Guarda el nuevo token en Redux y localStorage

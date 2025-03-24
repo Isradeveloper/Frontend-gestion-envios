@@ -36,16 +36,22 @@ const authSlice = createSlice({
       state.status = AuthStatus.AUTHENTICATED;
       setLocalStorage<User>("user", action.payload);
     },
+    updateToken(state, action: PayloadAction<string>) {
+      if (!state.user) return;
+
+      state.user = {
+        ...state.user,
+        token: action.payload,
+      };
+      setLocalStorage<User>("user", state.user);
+    },
     logout(state) {
       state.user = null;
       state.status = AuthStatus.UNAUTHENTICATED;
       removeLocalStorage("user");
     },
-    loading(state) {
-      state.status = AuthStatus.LOADING;
-    },
   },
 });
 
-export const { login, logout, loading } = authSlice.actions;
+export const { login, logout, updateToken } = authSlice.actions;
 export default authSlice.reducer;

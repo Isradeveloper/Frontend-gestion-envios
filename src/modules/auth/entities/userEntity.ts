@@ -6,6 +6,7 @@ export interface ResponseApiAuth {
 export interface Data {
   user: User;
   token: string;
+  refreshToken: string;
 }
 
 export interface UserApi {
@@ -25,7 +26,8 @@ export class User {
     public readonly role: string,
     public readonly createdAt: Date,
     public readonly active: number,
-    public readonly token: string
+    public readonly token: string,
+    public readonly refreshToken: string
   ) {}
 
   static fromApi(data: Data) {
@@ -36,7 +38,8 @@ export class User {
       data.user.role,
       data.user.createdAt,
       data.user.active,
-      data.token
+      data.token,
+      data.refreshToken
     );
   }
 }

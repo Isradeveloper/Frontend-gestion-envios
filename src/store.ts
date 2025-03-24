@@ -3,6 +3,7 @@ import authReducer from "./modules/auth/authSlice";
 import commonReducer from "./modules/common/commonSlice";
 import enviosReducer from "./modules/envios/enviosSlice";
 import transportistasReducer from "./modules/transportistas/transportistasSlice";
+import vehiculosReducer from "./modules/vehiculos/vehiculosSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     auth: authReducer,
     envios: enviosReducer,
     transportistas: transportistasReducer,
+    vehiculos: vehiculosReducer,
   },
 });
 

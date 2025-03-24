@@ -6,6 +6,7 @@ import { AuthState } from "./modules/auth/authSlice";
 import { JSX } from "react";
 import { EnviosPage } from "./modules/envios/pages/EnviosPage";
 import { TransportistasPage } from "./modules/transportistas/pages/TransportistasPage";
+import { VehiculosPage } from "./modules/vehiculos/pages/VehiculosPage";
 
 // Redirige a home si el usuario ya está autenticado
 const AuthRedirect = ({ children }: { children: JSX.Element }) => {
@@ -49,6 +50,7 @@ function App() {
         <Route index element={<EnviosPage />} />
         <Route path="envios" element={<EnviosPage />} />
         <Route path="transportistas" element={<TransportistasPage />} />
+        <Route path="vehiculos" element={<VehiculosPage />} />
       </Route>
 
       {/* Redirigir rutas desconocidas a login */}

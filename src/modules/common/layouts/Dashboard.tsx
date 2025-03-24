@@ -8,6 +8,7 @@ import { PageContainer } from "@toolpad/core/PageContainer";
 import { Outlet } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 
 const NAVIGATION: Navigation = [
   {
@@ -19,6 +20,11 @@ const NAVIGATION: Navigation = [
     segment: "transportistas",
     title: "Transportistas",
     icon: <PersonIcon />,
+  },
+  {
+    segment: "vehiculos",
+    title: "Vehículos",
+    icon: <AirportShuttleIcon />,
   },
   {
     kind: "divider",

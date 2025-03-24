@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useState, useCallback } from "react";
 import { enviosService, GetEnviosParams } from "../services/enviosService";
-import { EnviosState, setEnvios } from "../enviosSlice";
+import { EnviosState, setEnvios, setEstados } from "../enviosSlice";
 import { onError, SetErrors } from "../../common/utils";
 import {
   showBackdrop,
@@ -22,6 +22,29 @@ export const useEnvios = () => {
     fechaInicio: "",
     fechaFin: "",
   });
+
+  const getEstados = async () => {
+    try {
+      dispatch(showBackdrop());
+      const estados = await enviosService.getEstados();
+      if (!estados) {
+        throw new Error("No se pudieron obtener los estados.");
+      }
+      dispatch(setEstados(estados));
+    } catch (err) {
+      onError({
+        dispatch,
+        error: err,
+        setValidationErrors,
+      });
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
+
+  useEffect(() => {
+    getEstados();
+  }, []);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -51,7 +74,7 @@ export const useEnvios = () => {
     }));
   };
 
-  const onChangeDate = (value: dayjs.Dayjs, name: string) => {
+  const onChangeDate = (value: dayjs.Dayjs | null, name: string) => {
     setValues((prev) => ({
       ...prev,
       [name]: value?.format("YYYY-MM-DD") || "",
@@ -81,7 +104,7 @@ export const useEnvios = () => {
     Record<string, string[]>
   >({});
 
-  const { envios, total } = useSelector(
+  const { envios, total, estados } = useSelector(
     (state: { envios: EnviosState }) => state.envios
   );
 
@@ -93,8 +116,6 @@ export const useEnvios = () => {
         dispatch(showBackdrop());
 
         const response = await enviosService.getEnvios(params);
-
-        console.log("Response:", response);
 
         if (!response || !response.items) {
           throw new Error("No se pudieron obtener los envíos.");
@@ -153,7 +174,7 @@ export const useEnvios = () => {
         })
       );
 
-      return response;
+      await getEnvios(params);
     } catch (err) {
       onError({
         dispatch,
@@ -186,5 +207,6 @@ export const useEnvios = () => {
     onChangeAutoComplete,
     onChangeDate,
     createEnvio,
+    estados,
   };
 };

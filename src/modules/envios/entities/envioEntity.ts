@@ -1,3 +1,8 @@
+export interface EstadoMaestro {
+  id: number;
+  name: string;
+}
+
 export interface EnvioAPI {
   message: string;
   data: Data;

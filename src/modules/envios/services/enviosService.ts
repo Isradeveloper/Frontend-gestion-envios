@@ -1,11 +1,7 @@
 import { api } from "../../../api/backend";
+import { SuccessData } from "../../common/interfaces";
 import { calculateTotalPages } from "../../common/utils";
-import { Envio, EnvioAPI } from "../entities/envioEntity";
-
-export interface getEnvios {
-  items: Envio[];
-  total: number;
-}
+import { Envio, EnvioAPI, EstadoMaestro } from "../entities/envioEntity";
 
 export interface GetEnviosParams {
   page: number;
@@ -39,6 +35,15 @@ export const enviosService = {
     });
     if (response.status === 200) {
       return Envio.fromApi(response.data.data);
+    }
+  },
+  getEstados: async () => {
+    const response = await api.get<SuccessData<EstadoMaestro[]>>("/estados");
+    if (response.status === 200) {
+      return response.data.data.map((estado) => ({
+        id: estado.id,
+        name: estado.name,
+      }));
     }
   },
 };

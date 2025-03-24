@@ -4,7 +4,8 @@ import DashboardLayoutBasic from "./modules/common/layouts/Dashboard";
 import { useSelector } from "react-redux";
 import { AuthState } from "./modules/auth/authSlice";
 import { JSX } from "react";
-import EnviosList from "./modules/envios/pages/EnviosList";
+import { EnviosPage } from "./modules/envios/pages/EnviosPage";
+import { TransportistasPage } from "./modules/transportistas/pages/TransportistasPage";
 
 // Redirige a home si el usuario ya está autenticado
 const AuthRedirect = ({ children }: { children: JSX.Element }) => {
@@ -45,8 +46,9 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<EnviosList />} />
-        <Route path="envios" element={<EnviosList />} />
+        <Route index element={<EnviosPage />} />
+        <Route path="envios" element={<EnviosPage />} />
+        <Route path="transportistas" element={<TransportistasPage />} />
       </Route>
 
       {/* Redirigir rutas desconocidas a login */}

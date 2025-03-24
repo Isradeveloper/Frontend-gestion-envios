@@ -1,5 +1,4 @@
 import { extendTheme } from "@mui/material/styles";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LayersIcon from "@mui/icons-material/Layers";
@@ -8,6 +7,7 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
 import { Outlet } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
+import PersonIcon from "@mui/icons-material/Person";
 
 const NAVIGATION: Navigation = [
   {
@@ -16,9 +16,9 @@ const NAVIGATION: Navigation = [
     icon: <EmailIcon />,
   },
   {
-    segment: "orders",
-    title: "Orders",
-    icon: <ShoppingCartIcon />,
+    segment: "transportistas",
+    title: "Transportistas",
+    icon: <PersonIcon />,
   },
   {
     kind: "divider",

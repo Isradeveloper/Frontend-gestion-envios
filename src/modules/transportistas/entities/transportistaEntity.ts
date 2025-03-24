@@ -6,6 +6,12 @@ export interface Data {
   };
 }
 
+export interface TransportistaMaestro {
+  id: number;
+  nombre: string;
+  cedula: string;
+}
+
 export class Transportista {
   constructor(
     public readonly id: number,

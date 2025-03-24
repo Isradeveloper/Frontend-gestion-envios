@@ -1,6 +1,11 @@
 import { api } from "../../../api/backend";
 import { calculateTotalPages } from "../../common/utils";
-import { Transportista, Data } from "../entities/transportistaEntity";
+import {
+  Transportista,
+  Data,
+  TransportistaMaestro,
+} from "../entities/transportistaEntity";
+import { SuccessData } from "../../common/interfaces";
 
 export interface GetTransportistasParams {
   page: number;
@@ -23,6 +28,14 @@ export const transportistasService = {
     });
     if (response.status === 201) {
       return Transportista.fromApi(response.data);
+    }
+  },
+  getMaestroTransportistas: async () => {
+    const response = await api.get<SuccessData<TransportistaMaestro[]>>(
+      "/transportistas/maestro"
+    );
+    if (response.status === 200) {
+      return response.data.data;
     }
   },
 };

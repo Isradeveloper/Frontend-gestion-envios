@@ -4,6 +4,7 @@ import { useVehiculos } from "../hooks/useVehiculos";
 import * as Yup from "yup";
 import { EstadoChip, FilterComponent } from "../components";
 import ModalWithFormik from "../components/ModalWithFormik";
+import { useEffect } from "react";
 
 export const VehiculosPage = () => {
   const {
@@ -15,7 +16,12 @@ export const VehiculosPage = () => {
     onChange,
     onFilter,
     createVehiculo,
+    getVehiculos,
   } = useVehiculos();
+
+  useEffect(() => {
+    getVehiculos(params);
+  }, [params]);
 
   const columns = [
     { header: "ID", render: (item: Vehiculo) => item.id },

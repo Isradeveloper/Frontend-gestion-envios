@@ -4,6 +4,7 @@ import { useTransportistas } from "../hooks/useTransportistas";
 import * as Yup from "yup";
 import { EstadoChip, FilterComponent } from "../components";
 import ModalWithFormik from "../components/ModalWithFormik";
+import { useEffect } from "react";
 
 export const TransportistasPage = () => {
   const {
@@ -14,8 +15,13 @@ export const TransportistasPage = () => {
     handlePageChange,
     onChange,
     onFilter,
+    getTransportistas,
     createTransportista,
   } = useTransportistas();
+
+  useEffect(() => {
+    getTransportistas(params);
+  }, [params]);
 
   const columns = [
     { header: "ID", render: (item: Transportista) => item.id },
@@ -48,7 +54,13 @@ export const TransportistasPage = () => {
       total={total}
       page={params.page}
       onPageChange={handlePageChange}
-      filterComponent={<FilterComponent values={values} onChange={onChange} onFilter={onFilter} />}
+      filterComponent={
+        <FilterComponent
+          values={values}
+          onChange={onChange}
+          onFilter={onFilter}
+        />
+      }
       modal={
         <ModalWithFormik
           modalTitle="Crear transportista"

@@ -1,7 +1,12 @@
 import { useDispatch } from "react-redux";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { enviosService, GetEnviosParams } from "../services/enviosService";
-import { EnviosState, setEnvios, setEstados } from "../enviosSlice";
+import {
+  EnviosState,
+  setEnvios,
+  setEstados,
+  setSelected,
+} from "../enviosSlice";
 import { onError, SetErrors } from "../../common/utils";
 import {
   showBackdrop,
@@ -9,9 +14,11 @@ import {
   showAlert,
 } from "../../common/commonSlice";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import dayjs from "dayjs";
 import { AuthState } from "../../auth/authSlice";
+import { rutasService } from "../../rutas/services/rutasService";
+import { setRutasPendientes } from "../../rutas/rutasSlice";
+import { Envio } from "../entities/envioEntity";
 
 export const useEnvios = () => {
   const dispatch = useDispatch();
@@ -22,29 +29,6 @@ export const useEnvios = () => {
     fechaInicio: "",
     fechaFin: "",
   });
-
-  const getEstados = async () => {
-    try {
-      dispatch(showBackdrop());
-      const estados = await enviosService.getEstados();
-      if (!estados) {
-        throw new Error("No se pudieron obtener los estados.");
-      }
-      dispatch(setEstados(estados));
-    } catch (err) {
-      onError({
-        dispatch,
-        error: err,
-        setValidationErrors,
-      });
-    } finally {
-      dispatch(hideBackdrop());
-    }
-  };
-
-  useEffect(() => {
-    getEstados();
-  }, []);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -104,51 +88,98 @@ export const useEnvios = () => {
     Record<string, string[]>
   >({});
 
-  const { envios, total, estados } = useSelector(
+  const { envios, total, estados, selected } = useSelector(
     (state: { envios: EnviosState }) => state.envios
   );
 
   const { user } = useSelector((state: { auth: AuthState }) => state.auth);
 
-  const getEnvios = useCallback(
-    async (params: GetEnviosParams) => {
-      try {
-        dispatch(showBackdrop());
+  const getEnvios = async (params: GetEnviosParams) => {
+    try {
+      dispatch(showBackdrop());
 
-        const response = await enviosService.getEnvios(params);
+      const response = await enviosService.getEnvios(params);
 
-        if (!response || !response.items) {
-          throw new Error("No se pudieron obtener los envíos.");
-        }
-
-        dispatch(
-          setEnvios({
-            envios: response.items,
-            total: response.total,
-            params,
-          })
-        );
-        dispatch(
-          showAlert({
-            message: "Envíos obtenidos exitosamente",
-            severity: "success",
-          })
-        );
-
-        return response;
-      } catch (err) {
-        onError({
-          dispatch,
-          error: err,
-          setValidationErrors,
-        });
-        throw err;
-      } finally {
-        dispatch(hideBackdrop());
+      if (!response || !response.items) {
+        throw new Error("No se pudieron obtener los envíos.");
       }
-    },
-    [dispatch]
-  );
+
+      dispatch(
+        setEnvios({
+          envios: response.items,
+          total: response.total,
+          params,
+        })
+      );
+      dispatch(
+        showAlert({
+          message: "Envíos obtenidos exitosamente",
+          severity: "success",
+        })
+      );
+
+      return response;
+    } catch (err) {
+      onError({
+        dispatch,
+        error: err,
+        setValidationErrors,
+      });
+      throw err;
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
+
+  const getRutasPendientes = async () => {
+    try {
+      dispatch(showBackdrop());
+
+      const response = await rutasService.getRutasPendientes();
+
+      if (!response) {
+        throw new Error("No se pudieron obtener las rutas.");
+      }
+
+      dispatch(setRutasPendientes(response));
+      dispatch(
+        showAlert({
+          message: "Rutas obtenidas exitosamente",
+          severity: "success",
+        })
+      );
+
+      return response;
+    } catch (err) {
+      onError({
+        dispatch,
+        error: err,
+        setValidationErrors,
+      });
+      throw err;
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
+
+  const getEstados = async () => {
+    try {
+      dispatch(showBackdrop());
+      const estados = await enviosService.getEstados();
+      if (!estados) {
+        throw new Error("No se pudieron obtener los estados.");
+      }
+      dispatch(setEstados(estados));
+    } catch (err) {
+      onError({
+        dispatch,
+        error: err,
+        setValidationErrors,
+      });
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
 
   const createEnvio = async (
     envio: Record<string, unknown>,
@@ -188,9 +219,34 @@ export const useEnvios = () => {
     }
   };
 
-  useEffect(() => {
-    getEnvios(params);
-  }, [getEnvios, params]);
+  const asignarSeleccionados = (selected: Envio[]) => {
+    dispatch(setSelected(selected));
+  };
+
+  const asignarRuta = async (
+    enviosIds: number[],
+    rutaId: number,
+    setErrors?: SetErrors
+  ) => {
+    try {
+      dispatch(showBackdrop());
+
+      const response = await enviosService.asignarRuta(enviosIds, rutaId);
+      if (!response) throw new Error("No se pudo crear la ruta.");
+      dispatch(
+        showAlert({
+          message: "Ruta asignada exitosamente",
+          severity: "success",
+        })
+      );
+      await getEnvios(params);
+      asignarSeleccionados([]);
+    } catch (err) {
+      onError({ dispatch, error: err, setValidationErrors, setErrors });
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
 
   return {
     validationErrors,
@@ -198,6 +254,8 @@ export const useEnvios = () => {
     total,
     params,
     values,
+    estados,
+    selected,
     setParams,
     setValues,
     getEnvios,
@@ -207,6 +265,9 @@ export const useEnvios = () => {
     onChangeAutoComplete,
     onChangeDate,
     createEnvio,
-    estados,
+    getRutasPendientes,
+    getEstados,
+    asignarRuta,
+    asignarSeleccionados,
   };
 };

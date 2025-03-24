@@ -2,8 +2,9 @@ import GenericTableWithModal from "../../common/components/GenericTableWithModal
 import { Envio } from "../entities/envioEntity";
 import { useEnvios } from "../hooks/useEnvios";
 import * as Yup from "yup";
-import { EstadoChip, FilterComponent } from "../components";
+import { AsignarRuta, EstadoChip, FilterComponent } from "../components";
 import ModalWithFormik from "../components/ModalWithFormik";
+import { useEffect } from "react";
 
 export const EnviosPage = () => {
   const {
@@ -18,6 +19,10 @@ export const EnviosPage = () => {
     onChangeAutoComplete,
     values,
     estados,
+    getEnvios,
+    getEstados,
+    selected,
+    asignarSeleccionados,
   } = useEnvios();
 
   const columns = [
@@ -33,7 +38,16 @@ export const EnviosPage = () => {
     { header: "Alto (cm)", render: (item: Envio) => item.alto },
     { header: "Ancho (cm)", render: (item: Envio) => item.ancho },
     { header: "Largo (cm)", render: (item: Envio) => item.largo },
+    {
+      header: "Volumen (cm3)",
+      render: (item: Envio) =>
+        Number(item.alto) * Number(item.ancho) * Number(item.largo),
+    },
     { header: "Peso (kg)", render: (item: Envio) => item.peso },
+    {
+      header: "Ruta",
+      render: (item: Envio) => (item.ruta?.id ? item.ruta.id : "---"),
+    },
     {
       header: "Estado",
       render: (item: Envio) => <EstadoChip estado={item.ultimoEstado} />,
@@ -66,6 +80,14 @@ export const EnviosPage = () => {
     tipoProducto: "",
   };
 
+  useEffect(() => {
+    getEnvios(params);
+  }, [params]);
+
+  useEffect(() => {
+    getEstados();
+  }, []);
+
   return (
     <GenericTableWithModal<Envio>
       title="Envíos"
@@ -75,6 +97,10 @@ export const EnviosPage = () => {
       total={total}
       page={params.page}
       onPageChange={handlePageChange}
+      selectTable
+      accion={<AsignarRuta />}
+      onSelect={asignarSeleccionados}
+      selected={selected}
       modal={
         <ModalWithFormik
           modalTitle="Crear envío"

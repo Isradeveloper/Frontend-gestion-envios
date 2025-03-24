@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import {
   GetVehiculosParams,
   vehiculosService,
@@ -11,7 +11,6 @@ import {
   showAlert,
 } from "../../common/commonSlice";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import { setVehiculos, VehiculosState } from "../vehiculosSlice";
 
 export const useVehiculos = () => {
@@ -60,45 +59,42 @@ export const useVehiculos = () => {
     (state: { vehiculos: VehiculosState }) => state.vehiculos
   );
 
-  const getVehiculos = useCallback(
-    async (params: GetVehiculosParams) => {
-      try {
-        dispatch(showBackdrop());
+  const getVehiculos = async (params: GetVehiculosParams) => {
+    try {
+      dispatch(showBackdrop());
 
-        const response = await vehiculosService.getVehiculos(params);
+      const response = await vehiculosService.getVehiculos(params);
 
-        if (!response || !response.items) {
-          throw new Error("No se pudieron obtener los vehículos.");
-        }
-
-        dispatch(
-          setVehiculos({
-            vehiculos: response.items,
-            total: response.total,
-            params,
-          })
-        );
-        dispatch(
-          showAlert({
-            message: "Envíos obtenidos exitosamente",
-            severity: "success",
-          })
-        );
-
-        return response;
-      } catch (err) {
-        onError({
-          dispatch,
-          error: err,
-          setValidationErrors,
-        });
-        throw err;
-      } finally {
-        dispatch(hideBackdrop());
+      if (!response || !response.items) {
+        throw new Error("No se pudieron obtener los vehículos.");
       }
-    },
-    [dispatch]
-  );
+
+      dispatch(
+        setVehiculos({
+          vehiculos: response.items,
+          total: response.total,
+          params,
+        })
+      );
+      dispatch(
+        showAlert({
+          message: "Envíos obtenidos exitosamente",
+          severity: "success",
+        })
+      );
+
+      return response;
+    } catch (err) {
+      onError({
+        dispatch,
+        error: err,
+        setValidationErrors,
+      });
+      throw err;
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
 
   const createVehiculo = async (
     vehiculo: Record<string, unknown>,
@@ -133,10 +129,6 @@ export const useVehiculos = () => {
       dispatch(hideBackdrop());
     }
   };
-
-  useEffect(() => {
-    getVehiculos(params);
-  }, [getVehiculos, params]);
 
   return {
     validationErrors,

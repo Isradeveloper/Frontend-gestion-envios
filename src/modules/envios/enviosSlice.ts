@@ -7,6 +7,7 @@ export interface EnviosState {
   total: number;
   params: GetEnviosParams;
   estados: EstadoMaestro[];
+  selected: Envio[];
 }
 
 const initialState: EnviosState = {
@@ -17,6 +18,7 @@ const initialState: EnviosState = {
     size: 10,
   },
   estados: [],
+  selected: [],
 };
 
 const enviosSlice = createSlice({
@@ -38,8 +40,11 @@ const enviosSlice = createSlice({
     setEstados(state, action: PayloadAction<EstadoMaestro[]>) {
       state.estados = action.payload;
     },
+    setSelected(state, action: PayloadAction<Envio[]>) {
+      state.selected = action.payload;
+    },
   },
 });
 
-export const { setEnvios, setEstados } = enviosSlice.actions;
+export const { setEnvios, setEstados, setSelected } = enviosSlice.actions;
 export default enviosSlice.reducer;

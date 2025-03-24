@@ -46,4 +46,13 @@ export const enviosService = {
       }));
     }
   },
+  asignarRuta: async (enviosIds: number[], rutaId: number) => {
+    const response = await api.post<SuccessData<{ message: string }>>(
+      `/rutas/asociate-envios`,
+      { enviosIds, rutaId }
+    );
+    if (response.status === 200) {
+      return response.data;
+    }
+  },
 };

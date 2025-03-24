@@ -6,6 +6,11 @@ export interface Data {
   };
 }
 
+export interface VehiculoMaestro {
+  id: number;
+  placa: string;
+}
+
 export class Vehiculo {
   constructor(
     public readonly id: number,

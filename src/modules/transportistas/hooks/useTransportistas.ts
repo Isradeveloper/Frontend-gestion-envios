@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import {
   GetTransportistasParams,
   transportistasService,
@@ -11,7 +11,6 @@ import {
   showAlert,
 } from "../../common/commonSlice";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import { setTransportistas, TransportistasState } from "../transportistasSlice";
 
 export const useTransportistas = () => {
@@ -60,45 +59,42 @@ export const useTransportistas = () => {
     (state: { transportistas: TransportistasState }) => state.transportistas
   );
 
-  const getTransportistas = useCallback(
-    async (params: GetTransportistasParams) => {
-      try {
-        dispatch(showBackdrop());
+  const getTransportistas = async (params: GetTransportistasParams) => {
+    try {
+      dispatch(showBackdrop());
 
-        const response = await transportistasService.getTransportistas(params);
+      const response = await transportistasService.getTransportistas(params);
 
-        if (!response || !response.items) {
-          throw new Error("No se pudieron obtener los transportistas.");
-        }
-
-        dispatch(
-          setTransportistas({
-            transportistas: response.items,
-            total: response.total,
-            params,
-          })
-        );
-        dispatch(
-          showAlert({
-            message: "Envíos obtenidos exitosamente",
-            severity: "success",
-          })
-        );
-
-        return response;
-      } catch (err) {
-        onError({
-          dispatch,
-          error: err,
-          setValidationErrors,
-        });
-        throw err;
-      } finally {
-        dispatch(hideBackdrop());
+      if (!response || !response.items) {
+        throw new Error("No se pudieron obtener los transportistas.");
       }
-    },
-    [dispatch]
-  );
+
+      dispatch(
+        setTransportistas({
+          transportistas: response.items,
+          total: response.total,
+          params,
+        })
+      );
+      dispatch(
+        showAlert({
+          message: "Envíos obtenidos exitosamente",
+          severity: "success",
+        })
+      );
+
+      return response;
+    } catch (err) {
+      onError({
+        dispatch,
+        error: err,
+        setValidationErrors,
+      });
+      throw err;
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
 
   const createTransportista = async (
     transportista: Record<string, unknown>,
@@ -134,10 +130,6 @@ export const useTransportistas = () => {
       dispatch(hideBackdrop());
     }
   };
-
-  useEffect(() => {
-    getTransportistas(params);
-  }, [getTransportistas, params]);
 
   return {
     validationErrors,

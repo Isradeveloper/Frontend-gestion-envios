@@ -1,4 +1,5 @@
 import { api } from "../../../api/backend";
+import { SuccessData } from "../../common/interfaces";
 import { calculateTotalPages } from "../../common/utils";
 import { Vehiculo, Data } from "../entities/vehiculoEntity";
 
@@ -25,6 +26,13 @@ export const vehiculosService = {
     });
     if (response.status === 201) {
       return Vehiculo.fromApi(response.data);
+    }
+  },
+  getMaestroVehiculos: async () => {
+    const response =
+      await api.get<SuccessData<Vehiculo[]>>("/vehiculos/maestro");
+    if (response.status === 200) {
+      return response.data.data;
     }
   },
 };

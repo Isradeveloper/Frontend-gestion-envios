@@ -7,6 +7,7 @@ import { JSX } from "react";
 import { EnviosPage } from "./modules/envios/pages/EnviosPage";
 import { TransportistasPage } from "./modules/transportistas/pages/TransportistasPage";
 import { VehiculosPage } from "./modules/vehiculos/pages/VehiculosPage";
+import { RutasPage } from "./modules/rutas/pages/RutasPage";
 
 // Redirige a home si el usuario ya está autenticado
 const AuthRedirect = ({ children }: { children: JSX.Element }) => {
@@ -51,6 +52,7 @@ function App() {
         <Route path="envios" element={<EnviosPage />} />
         <Route path="transportistas" element={<TransportistasPage />} />
         <Route path="vehiculos" element={<VehiculosPage />} />
+        <Route path="rutas" element={<RutasPage />} />
       </Route>
 
       {/* Redirigir rutas desconocidas a login */}

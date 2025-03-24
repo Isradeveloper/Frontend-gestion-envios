@@ -9,7 +9,7 @@ import { Outlet } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-
+import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 const NAVIGATION: Navigation = [
   {
     segment: "envios",
@@ -20,6 +20,11 @@ const NAVIGATION: Navigation = [
     segment: "transportistas",
     title: "Transportistas",
     icon: <PersonIcon />,
+  },
+  {
+    segment: "rutas",
+    title: "Rutas",
+    icon: <AirlineStopsIcon />,
   },
   {
     segment: "vehiculos",

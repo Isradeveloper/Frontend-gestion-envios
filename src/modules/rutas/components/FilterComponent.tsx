@@ -7,8 +7,9 @@ import { TextField } from "@mui/material";
 import { IconButton } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import dayjs from "dayjs";
-import { GetEnviosParams } from "../services/enviosService";
-import { EstadoMaestro } from "../entities/envioEntity";
+import { GetRutasParams } from "../services/rutasService";
+import { TransportistaMaestro } from "../../transportistas/entities/transportistaEntity";
+import { VehiculoMaestro } from "../../vehiculos/entities/vehiculoEntity";
 
 interface FilterProps {
   onChangeDate: (value: dayjs.Dayjs | null, name: string) => void;
@@ -17,19 +18,21 @@ interface FilterProps {
     newValue: string | null,
     name: string
   ) => void;
-  values: Partial<GetEnviosParams>;
+  values: Partial<GetRutasParams>;
   onFilter: () => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  estados: EstadoMaestro[];
+  transportistas: TransportistaMaestro[];
+  vehiculos: VehiculoMaestro[];
 }
 
 export const FilterComponent = ({
   onChangeDate,
   onChangeAutoComplete,
-  estados,
+  transportistas,
   values,
   onChange,
   onFilter,
+  vehiculos,
 }: FilterProps) => {
   return (
     <Box
@@ -45,7 +48,7 @@ export const FilterComponent = ({
     >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          label="Desde"
+          label="Iniciadas en"
           sx={{ width: "150px" }}
           name="fechaInicio"
           onChange={(value) => onChangeDate(value!, "fechaInicio")}
@@ -54,21 +57,52 @@ export const FilterComponent = ({
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          label="Hasta"
+          label="Finalizadas en"
           sx={{ width: "150px" }}
           name="fechaFin"
           onChange={(value) => onChangeDate(value!, "fechaFin")}
         />
       </LocalizationProvider>
 
-      <Autocomplete
-        options={estados.map((estado) => estado.name)}
-        sx={{ width: 300 }}
-        onChange={(event: React.SyntheticEvent, newValue: string | null) => {
-          onChangeAutoComplete(event, newValue, "estado");
+      <Autocomplete<{ label: string; value: string }, false, false, false>
+        options={transportistas.map(({ id, nombre, cedula }) => ({
+          label: `${nombre} - ${cedula}`,
+          value: id.toString(),
+        }))}
+        getOptionLabel={(option) => option.label}
+        onChange={(event, newValue) => {
+          onChangeAutoComplete(
+            event,
+            newValue?.value || null,
+            "transportistaId"
+          );
         }}
         renderInput={(params) => (
-          <TextField {...params} label="Estado" size="medium" />
+          <TextField
+            {...params}
+            label="Transportista"
+            variant="outlined"
+            sx={{ width: "200px" }}
+          />
+        )}
+      />
+
+      <Autocomplete<{ label: string; value: string }, false, false, false>
+        options={vehiculos.map(({ id, placa }) => ({
+          label: placa,
+          value: id.toString(),
+        }))}
+        getOptionLabel={(option) => option.label}
+        onChange={(event, newValue) => {
+          onChangeAutoComplete(event, newValue?.value || null, "vehiculoId");
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Vehiculo"
+            variant="outlined"
+            sx={{ width: "200px" }}
+          />
         )}
       />
 

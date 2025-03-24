@@ -5,7 +5,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Box, Pagination, Typography } from "@mui/material";
+import { Box, Pagination, Typography, Checkbox } from "@mui/material";
 
 interface GenericTableWithModalProps<T> {
   title: string;
@@ -20,11 +20,15 @@ interface GenericTableWithModalProps<T> {
   onPageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
   filterComponent?: React.ReactNode;
   modal?: React.ReactNode;
+  selectTable?: boolean;
+  onSelectRow?: (item: T) => void;
+  onSelectAll?: (items: T[]) => void;
+  accion?: React.ReactNode;
+  onSelect?: (items: T[]) => void;
+  selected?: T[];
 }
 
-const GenericTableWithModal = <T,>(
-  props: GenericTableWithModalProps<T>
-) => {
+const GenericTableWithModal = <T,>(props: GenericTableWithModalProps<T>) => {
   const {
     title,
     data,
@@ -34,7 +38,48 @@ const GenericTableWithModal = <T,>(
     onPageChange,
     filterComponent,
     modal,
+    selectTable = false,
+    onSelectRow,
+    onSelectAll,
+    accion,
+    onSelect,
+    selected,
   } = props;
+
+  const onPageChangeInternal = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    onPageChange(event, value);
+    onSelect?.([]);
+  };
+
+  const handleSelectRow = (item: T) => {
+    if (onSelectRow) onSelectRow(item);
+    const index = selected?.indexOf(item);
+    if (index === -1) {
+      onSelect?.([...(selected || []), item]);
+    } else {
+      onSelect?.((selected || []).filter((i) => i !== item));
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (onSelectAll) onSelectAll(data);
+    onSelect?.(data);
+  };
+
+  const handleUnselectAll = () => {
+    onSelect?.([]);
+  };
+
+  const handleToggleSelectAll = () => {
+    if ((selected || []).length === data.length) {
+      handleUnselectAll();
+    } else {
+      handleSelectAll();
+    }
+  };
 
   return (
     <>
@@ -71,10 +116,25 @@ const GenericTableWithModal = <T,>(
         </Box>
       )}
 
+      {selected && selected.length > 0 && accion}
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
           <TableHead>
             <TableRow>
+              {selectTable && (
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    indeterminate={
+                      (selected || []).length > 0 &&
+                      (selected || []).length < data.length
+                    }
+                    checked={(selected || []).length === data.length}
+                    onChange={handleToggleSelectAll}
+                  />
+                </TableCell>
+              )}
+
               {columns.map((column) => (
                 <TableCell
                   key={column.header}
@@ -92,6 +152,14 @@ const GenericTableWithModal = <T,>(
                 key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
+                {selectTable && (
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={(selected || []).indexOf(item) !== -1}
+                      onChange={() => handleSelectRow(item)}
+                    />
+                  </TableCell>
+                )}
                 {columns.map((column, index) => (
                   <TableCell key={index} align="center">
                     {column.render(item)}
@@ -122,7 +190,7 @@ const GenericTableWithModal = <T,>(
           size="large"
           color="primary"
           page={page}
-          onChange={onPageChange}
+          onChange={onPageChangeInternal}
         />
       </Box>
     </>

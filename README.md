@@ -1,54 +1,47 @@
-# React + TypeScript + Vite
+Frontend - Gestión de Envíos y Rutas Logísticas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es un frontend desarrollado en React con Vite, SOCKET.io y usa Material-UI para el diseño de la interfaz.
 
-Currently, two official plugins are available:
+🚀 Pasos para ejecutar el proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1️⃣ Llenar las variables de entorno
 
-## Expanding the ESLint configuration
+Antes de ejecutar el proyecto, copia el archivo de ejemplo y modifica los valores según tu configuración.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2️⃣ Instalar dependencias
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Asegúrate de tener Yarn instalado y ejecuta:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+yarn install
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3️⃣ Iniciar el servidor en modo desarrollo
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Para ejecutar el frontend con Vite, usa el siguiente comando:
+
+yarn dev
+
+Esto iniciará el servidor y podrás acceder a la aplicación en http://localhost:5173/ (por defecto).
+
+🛠 Tecnologías usadas
+
+React.js
+
+Vite
+
+Material-UI
+
+SOCKET.io
+
+Chart.js (para reportes gráficos)
+
+📌 Notas adicionales
+
+Si necesitas cambiar el puerto por defecto de Vite, edita el archivo .env o usa el flag --port:
+
+yarn dev --port 3001
+
+Para construir la aplicación para producción:
+
+yarn build
+
+🚀 ¡Listo para desarrollar! 🎯

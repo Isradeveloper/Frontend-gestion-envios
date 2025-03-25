@@ -1,0 +1,33 @@
+export interface Datum {
+  id: number;
+  created_at: Date;
+  direccion: string;
+  alto: string;
+  ancho: string;
+  peso: string;
+  largo: string;
+  tipo_producto: string;
+  codigo: string;
+  usuario_id: number;
+  name: string;
+  email: string;
+  ultimo_estado: string;
+  ruta_id: number | null;
+  origen: null | string;
+  destino: null | string;
+  ruta_creada: Date | null;
+  ruta_estado: string | null;
+  fecha_inicio: Date | null;
+  fecha_fin: Date | null;
+  ruta_activa: number | null;
+  transportista_id: number | null;
+  transportista_nombre: null | string;
+  transportista_cedula: null | string;
+  vehiculo_id: number | null;
+  volumen_maximo: null | string;
+  peso_maximo: null | string;
+  vehiculo_placa: null | string;
+  fecha_entrega: Date | null;
+  envios_completados: number | null;
+  promedio_horas_entrega: null | string;
+}

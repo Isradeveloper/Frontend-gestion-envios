@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Envio, EstadoEnvio, EstadoMaestro } from "./entities/envioEntity";
 import { GetEnviosParams } from "./services/enviosService";
+import { Datum } from "./entities/reporteEntity";
 
 export interface EnviosState {
   envios: Envio[];
@@ -12,6 +13,7 @@ export interface EnviosState {
     code: string | null;
     estados: EstadoEnvio[];
   };
+  reporte: Datum[];
 }
 
 const initialState: EnviosState = {
@@ -27,6 +29,7 @@ const initialState: EnviosState = {
     code: null,
     estados: [],
   },
+  reporte: [],
 };
 
 const enviosSlice = createSlice({
@@ -60,9 +63,17 @@ const enviosSlice = createSlice({
     ) {
       state.estadosPorCode = action.payload;
     },
+    setReporte(state, action: PayloadAction<Datum[]>) {
+      state.reporte = action.payload;
+    },
   },
 });
 
-export const { setEnvios, setEstados, setSelected, setEstadosPorCode } =
-  enviosSlice.actions;
+export const {
+  setEnvios,
+  setEstados,
+  setSelected,
+  setEstadosPorCode,
+  setReporte,
+} = enviosSlice.actions;
 export default enviosSlice.reducer;

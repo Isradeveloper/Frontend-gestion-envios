@@ -88,38 +88,41 @@ export const EnviosPage = () => {
     getEstados();
   }, []);
 
+  // Esquema de validación de Formik
   return (
-    <GenericTableWithModal<Envio>
-      title="Envíos"
-      columns={columns}
-      data={envios}
-      pageSize={params.size}
-      total={total}
-      page={params.page}
-      onPageChange={handlePageChange}
-      selectTable
-      accion={<AsignarRuta />}
-      onSelect={asignarSeleccionados}
-      selected={selected}
-      modal={
-        <ModalWithFormik
-          modalTitle="Crear envío"
-          buttonLabel="Crear nuevo envío"
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onCreate={createEnvio}
-        />
-      }
-      filterComponent={
-        <FilterComponent
-          onChange={onChange}
-          onFilter={onFilter}
-          values={values}
-          onChangeDate={onChangeDate}
-          onChangeAutoComplete={onChangeAutoComplete}
-          estados={estados}
-        />
-      }
-    ></GenericTableWithModal>
+    <>
+      <GenericTableWithModal<Envio>
+        title="Envíos"
+        columns={columns}
+        data={envios}
+        pageSize={params.size}
+        total={total}
+        page={params.page}
+        onPageChange={handlePageChange}
+        selectTable
+        accion={<AsignarRuta />}
+        onSelect={asignarSeleccionados}
+        selected={selected}
+        modal={
+          <ModalWithFormik
+            modalTitle="Crear envío"
+            buttonLabel="Crear nuevo envío"
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onCreate={createEnvio}
+          />
+        }
+        filterComponent={
+          <FilterComponent
+            onChange={onChange}
+            onFilter={onFilter}
+            values={values}
+            onChangeDate={onChangeDate}
+            onChangeAutoComplete={onChangeAutoComplete}
+            estados={estados}
+          />
+        }
+      ></GenericTableWithModal>
+    </>
   );
 };

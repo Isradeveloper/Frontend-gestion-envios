@@ -10,6 +10,7 @@ import { VehiculosPage } from "./modules/vehiculos/pages/VehiculosPage";
 import { RutasPage } from "./modules/rutas/pages/RutasPage";
 import Logout from "./modules/auth/pages/Logout";
 import RastreoEnvio from "./modules/envios/pages/RastreoEnvio";
+import Reportes from "./modules/envios/pages/Reportes";
 
 // Redirige a home si el usuario ya está autenticado
 const AuthRedirect = ({ children }: { children: JSX.Element }) => {
@@ -57,6 +58,7 @@ function App() {
         <Route path="rutas" element={<RutasPage />} />
         <Route path="rastreo" element={<RastreoEnvio />} />
         <Route path="logout" element={<Logout />} />
+        <Route path="reportes" element={<Reportes />} />
       </Route>
 
       {/* Redirigir rutas desconocidas a login */}

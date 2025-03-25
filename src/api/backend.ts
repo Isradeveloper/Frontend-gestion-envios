@@ -4,8 +4,10 @@ import { User } from "../modules/auth/entities/userEntity";
 import { store } from "../store";
 import { logout, updateToken } from "../modules/auth/authSlice";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const apiToken = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: `${API_URL}/api`,
 });
 
 apiToken.interceptors.request.use((config) => {
@@ -54,8 +56,7 @@ apiToken.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-export default apiToken;
 
 export const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: `${API_URL}/api`,
 });

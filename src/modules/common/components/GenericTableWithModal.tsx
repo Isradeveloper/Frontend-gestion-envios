@@ -100,6 +100,8 @@ const GenericTableWithModal = <T,>(props: GenericTableWithModalProps<T>) => {
         {modal}
       </Box>
 
+      {selected && selected.length > 0 && accion}
+
       {filterComponent && (
         <Box
           display="flex"
@@ -116,83 +118,92 @@ const GenericTableWithModal = <T,>(props: GenericTableWithModalProps<T>) => {
         </Box>
       )}
 
-      {selected && selected.length > 0 && accion}
+      {total === 0 ? (
+        <Typography variant="h5" gutterBottom mt={2} align="center">
+          No hay {title}
+        </Typography>
+      ) : (
+        <>
+          <TableContainer component={Paper}>
+            <Table
+              sx={{ minWidth: 650 }}
+              aria-label="simple table"
+              stickyHeader
+            >
+              <TableHead>
+                <TableRow>
+                  {selectTable && (
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        indeterminate={
+                          (selected || []).length > 0 &&
+                          (selected || []).length < data.length
+                        }
+                        checked={(selected || []).length === data.length}
+                        onChange={handleToggleSelectAll}
+                      />
+                    </TableCell>
+                  )}
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
-          <TableHead>
-            <TableRow>
-              {selectTable && (
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    indeterminate={
-                      (selected || []).length > 0 &&
-                      (selected || []).length < data.length
-                    }
-                    checked={(selected || []).length === data.length}
-                    onChange={handleToggleSelectAll}
-                  />
-                </TableCell>
-              )}
-
-              {columns.map((column) => (
-                <TableCell
-                  key={column.header}
-                  align="center"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  {column.header}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((item, index) => (
-              <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                {selectTable && (
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={(selected || []).indexOf(item) !== -1}
-                      onChange={() => handleSelectRow(item)}
-                    />
-                  </TableCell>
-                )}
-                {columns.map((column, index) => (
-                  <TableCell key={index} align="center">
-                    {column.render(item)}
-                  </TableCell>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.header}
+                      align="center"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      {column.header}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((item, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    {selectTable && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={(selected || []).indexOf(item) !== -1}
+                          onChange={() => handleSelectRow(item)}
+                        />
+                      </TableCell>
+                    )}
+                    {columns.map((column, index) => (
+                      <TableCell key={index} align="center">
+                        {column.render(item)}
+                      </TableCell>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        mt={2}
-        position="sticky"
-        bottom={0}
-        p={2}
-        zIndex={1}
-        borderTop="1px solid #e0e0e0"
-        bgcolor={(theme) =>
-          theme.palette.mode === "dark" ? "#333" : "#f5f5f5"
-        }
-      >
-        <Pagination
-          count={total}
-          size="large"
-          color="primary"
-          page={page}
-          onChange={onPageChangeInternal}
-        />
-      </Box>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mt={2}
+            position="sticky"
+            bottom={0}
+            p={2}
+            zIndex={1}
+            borderTop="1px solid #e0e0e0"
+            bgcolor={(theme) =>
+              theme.palette.mode === "dark" ? "#333" : "#f5f5f5"
+            }
+          >
+            <Pagination
+              count={total}
+              size="large"
+              color="primary"
+              page={page}
+              onChange={onPageChangeInternal}
+            />
+          </Box>
+        </>
+      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { api } from "../../../api/backend";
+import { apiToken as api } from "../../../api/backend";
 import { calculateTotalPages } from "../../common/utils";
 import {
   Transportista,

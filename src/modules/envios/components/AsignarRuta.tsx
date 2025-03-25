@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { RutasState } from "../../rutas/rutasSlice";
 import { useEnvios } from "../hooks/useEnvios";
+import { AuthState } from "../../auth/authSlice";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -45,6 +46,8 @@ export const AsignarRuta = () => {
     (state: { rutas: RutasState }) => state.rutas
   );
 
+  const { user } = useSelector((state: { auth: AuthState }) => state.auth);
+
   const { getRutasPendientes, asignarRuta, selected } = useEnvios();
 
   const handleClose = () => {
@@ -58,102 +61,109 @@ export const AsignarRuta = () => {
 
   return (
     <>
-      <Box
-        display="flex"
-        justifyContent="end"
-        gap={2}
-        alignItems="center"
-        mb={5}
-      >
-        <Button
-          size="large"
-          color="secondary"
-          variant="outlined"
-          onClick={() => handleOpen()}
-        >
-          Asignar ruta
-        </Button>
-      </Box>
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        disableEscapeKeyDown
-        onClose={(event, reason) => {
-          if (reason === "backdropClick") return;
-          handleClose();
-        }}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Asignar envíos a ruta"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={async (values, { setErrors, resetForm }) => {
-                await asignarRuta(
-                  selected.map((s) => s.id),
-                  values.rutaId,
-                  setErrors
-                );
-                resetForm();
-                handleClose();
-              }}
+      {user?.role != "admin" ? (
+        <></>
+      ) : (
+        <>
+          <Box
+            display="flex"
+            justifyContent="end"
+            gap={2}
+            alignItems="center"
+            mb={5}
+          >
+            <Button
+              size="large"
+              color="secondary"
+              variant="outlined"
+              onClick={() => handleOpen()}
             >
-              {({ setFieldValue, errors, touched, values, resetForm }) => (
-                <Form>
-                  <FormControl fullWidth sx={{ mb: 2 }}>
-                    <FormLabel htmlFor="rutaId">Ruta</FormLabel>
+              Asignar ruta
+            </Button>
+          </Box>
+          <Dialog
+            open={open}
+            TransitionComponent={Transition}
+            keepMounted
+            disableEscapeKeyDown
+            onClose={(event, reason) => {
+              if (reason === "backdropClick") return;
+              handleClose();
+            }}
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle>{"Asignar envíos a ruta"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+                <Formik
+                  initialValues={initialValues}
+                  validationSchema={validationSchema}
+                  onSubmit={async (values, { setErrors, resetForm }) => {
+                    await asignarRuta(
+                      selected.map((s) => s.id),
+                      values.rutaId,
+                      setErrors
+                    );
+                    resetForm();
+                    handleClose();
+                  }}
+                >
+                  {({ setFieldValue, errors, touched, values, resetForm }) => (
+                    <Form>
+                      <FormControl fullWidth sx={{ mb: 2 }}>
+                        <FormLabel htmlFor="rutaId">Ruta</FormLabel>
 
-                    <Autocomplete
-                      options={rutasPendientes}
-                      getOptionLabel={({ id, origen, destino }) =>
-                        `${id} - ORIGEN: ${origen} - DESTINO: ${destino}`
-                      }
-                      onChange={(_, value) =>
-                        setFieldValue("rutaId", value ? value.id : "")
-                      }
-                      value={
-                        rutasPendientes.find((r) => r.id == values.rutaId) ||
-                        null
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          error={touched.rutaId && Boolean(errors.rutaId)}
-                          helperText={<ErrorMessage name="rutaId" />}
+                        <Autocomplete
+                          options={rutasPendientes}
+                          getOptionLabel={({ id, origen, destino }) =>
+                            `${id} - ORIGEN: ${origen} - DESTINO: ${destino}`
+                          }
+                          onChange={(_, value) =>
+                            setFieldValue("rutaId", value ? value.id : "")
+                          }
+                          value={
+                            rutasPendientes.find(
+                              (r) => r.id == values.rutaId
+                            ) || null
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              error={touched.rutaId && Boolean(errors.rutaId)}
+                              helperText={<ErrorMessage name="rutaId" />}
+                            />
+                          )}
                         />
-                      )}
-                    />
-                  </FormControl>
+                      </FormControl>
 
-                  <Box display="flex" gap={2} flexDirection="column">
-                    <Button type="submit" fullWidth variant="contained">
-                      Crear
-                    </Button>
+                      <Box display="flex" gap={2} flexDirection="column">
+                        <Button type="submit" fullWidth variant="contained">
+                          Crear
+                        </Button>
 
-                    <Button
-                      color="error"
-                      type="reset"
-                      fullWidth
-                      variant="contained"
-                      onClick={() => {
-                        handleClose();
-                        resetForm();
-                        setFieldValue("rutaId", "");
-                      }}
-                    >
-                      Cancelar
-                    </Button>
-                  </Box>
-                </Form>
-              )}
-            </Formik>
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
+                        <Button
+                          color="error"
+                          type="reset"
+                          fullWidth
+                          variant="contained"
+                          onClick={() => {
+                            handleClose();
+                            resetForm();
+                            setFieldValue("rutaId", "");
+                          }}
+                        >
+                          Cancelar
+                        </Button>
+                      </Box>
+                    </Form>
+                  )}
+                </Formik>
+              </DialogContentText>
+            </DialogContent>
+          </Dialog>
+        </>
+      )}
     </>
   );
 };

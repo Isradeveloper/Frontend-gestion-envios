@@ -32,6 +32,11 @@ const NAVIGATION_ADMIN: Navigation = [
     icon: <PersonIcon />,
   },
   {
+    segment: "reportes",
+    title: "Reportes",
+    icon: <PersonIcon />,
+  },
+  {
     segment: "rutas",
     title: "Rutas",
     icon: <AirlineStopsIcon />,

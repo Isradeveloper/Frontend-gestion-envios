@@ -9,9 +9,15 @@ import {
 } from "../../common/commonSlice";
 import { setRutas, RutasState } from "../rutasSlice";
 import { transportistasService } from "../../transportistas/services/transportistasService";
-import { setMaestroTransportistas } from "../../transportistas/transportistasSlice";
+import {
+  setMaestroTransportistas,
+  TransportistasState,
+} from "../../transportistas/transportistasSlice";
 import { vehiculosService } from "../../vehiculos/services/vehiculosService";
-import { setMaestroVehiculos } from "../../vehiculos/vehiculosSlice";
+import {
+  setMaestroVehiculos,
+  VehiculosState,
+} from "../../vehiculos/vehiculosSlice";
 import dayjs from "dayjs";
 
 export const useRutas = () => {
@@ -28,6 +34,12 @@ export const useRutas = () => {
   >({});
   const { rutas, total } = useSelector(
     (state: { rutas: RutasState }) => state.rutas
+  );
+  const { maestroVehiculos } = useSelector(
+    (state: { vehiculos: VehiculosState }) => state.vehiculos
+  );
+  const { maestroTransportistas } = useSelector(
+    (state: { transportistas: TransportistasState }) => state.transportistas
   );
 
   const handlePageChange = (
@@ -152,6 +164,8 @@ export const useRutas = () => {
     total,
     params,
     values,
+    maestroTransportistas,
+    maestroVehiculos,
     setParams,
     setValues,
     getRutas,

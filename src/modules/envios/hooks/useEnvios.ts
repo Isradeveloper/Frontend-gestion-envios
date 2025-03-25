@@ -6,6 +6,7 @@ import {
   setEnvios,
   setEstados,
   setEstadosPorCode,
+  setReporte,
   setSelected,
 } from "../enviosSlice";
 import { onError, SetErrors } from "../../common/utils";
@@ -82,16 +83,15 @@ export const useEnvios = () => {
     fechaInicio: "",
     fechaFin: "",
     transportistaId: undefined,
-    UsuarioId: undefined,
+    usuarioId: undefined,
   });
 
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string[]>
   >({});
 
-  const { envios, total, estados, selected, estadosPorCode } = useSelector(
-    (state: { envios: EnviosState }) => state.envios
-  );
+  const { envios, total, estados, selected, estadosPorCode, reporte } =
+    useSelector((state: { envios: EnviosState }) => state.envios);
 
   const { user } = useSelector((state: { auth: AuthState }) => state.auth);
 
@@ -99,7 +99,14 @@ export const useEnvios = () => {
     try {
       dispatch(showBackdrop());
 
-      const response = await enviosService.getEnvios(params);
+      if (!user) {
+        throw new Error("No se pudo obtener el usuario.");
+      }
+
+      const response = await enviosService.getEnvios({
+        ...params,
+        usuarioId: user.role === "cliente" ? user.id : undefined,
+      });
 
       if (!response || !response.items) {
         throw new Error("No se pudieron obtener los envíos.");
@@ -272,6 +279,35 @@ export const useEnvios = () => {
     }
   };
 
+  const getReporte = async (params: Partial<GetEnviosParams>) => {
+    try {
+      dispatch(showBackdrop());
+      const reporte = await enviosService.getReporte(params);
+      if (!reporte) {
+        throw new Error("No se pudo obtener el reporte.");
+      }
+
+      dispatch(setReporte(reporte));
+
+      dispatch(
+        showAlert({
+          message: `Reporte obtenido exitosamente`,
+          severity: "success",
+        })
+      );
+
+      return reporte;
+    } catch (err) {
+      onError({
+        dispatch,
+        error: err,
+        setValidationErrors,
+      });
+    } finally {
+      dispatch(hideBackdrop());
+    }
+  };
+
   return {
     validationErrors,
     envios,
@@ -281,6 +317,7 @@ export const useEnvios = () => {
     estados,
     selected,
     estadosPorCode,
+    reporte,
     setParams,
     setValues,
     getEnvios,
@@ -295,5 +332,6 @@ export const useEnvios = () => {
     asignarRuta,
     asignarSeleccionados,
     getEstadosPorCode,
+    getReporte,
   };
 };

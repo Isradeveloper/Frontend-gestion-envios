@@ -7,6 +7,7 @@ import {
   EstadoMaestro,
   EstadoEnvio,
 } from "../entities/envioEntity";
+import { Datum } from "../entities/reporteEntity";
 
 export interface GetEnviosParams {
   page: number;
@@ -16,7 +17,7 @@ export interface GetEnviosParams {
   fechaInicio?: string;
   fechaFin?: string;
   transportistaId?: number;
-  UsuarioId?: number;
+  usuarioId?: number;
 }
 
 export interface CreateEnvioAPI {
@@ -65,6 +66,17 @@ export const enviosService = {
       `envios/${codigo}/estados`
     );
     if (response.status === 200) {
+      return response.data.data;
+    }
+  },
+
+  getReporte: async (params: Partial<GetEnviosParams>) => {
+    const response = await api.get<SuccessData<Datum[]>>("/envios/reportes", {
+      params,
+    });
+    if (response.status === 200) {
+      console.log(response.data.data);
+
       return response.data.data;
     }
   },

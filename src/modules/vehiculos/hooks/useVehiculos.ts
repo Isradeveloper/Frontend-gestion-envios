@@ -21,8 +21,8 @@ export const useVehiculos = () => {
   });
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
+    _event: React.ChangeEvent<unknown>,
+    value: number,
   ) => {
     setParams((prev) => ({
       ...prev,
@@ -56,7 +56,7 @@ export const useVehiculos = () => {
   >({});
 
   const { vehiculos, total } = useSelector(
-    (state: { vehiculos: VehiculosState }) => state.vehiculos
+    (state: { vehiculos: VehiculosState }) => state.vehiculos,
   );
 
   const getVehiculos = async (params: GetVehiculosParams) => {
@@ -74,13 +74,13 @@ export const useVehiculos = () => {
           vehiculos: response.items,
           total: response.total,
           params,
-        })
+        }),
       );
       dispatch(
         showAlert({
           message: "Envíos obtenidos exitosamente",
           severity: "success",
-        })
+        }),
       );
 
       return response;
@@ -98,7 +98,7 @@ export const useVehiculos = () => {
 
   const createVehiculo = async (
     vehiculo: Record<string, unknown>,
-    setErrors?: SetErrors
+    setErrors?: SetErrors,
   ) => {
     try {
       dispatch(showBackdrop());
@@ -113,7 +113,7 @@ export const useVehiculos = () => {
         showAlert({
           message: "Vehiculo creado exitosamente",
           severity: "success",
-        })
+        }),
       );
 
       getVehiculos(params);

@@ -24,9 +24,15 @@ const Transition = forwardRef(function Transition(
   props: TransitionProps & {
     children: ReactElement<unknown>;
   },
-  ref: Ref<unknown>
+  ref: Ref<unknown>,
 ) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return (
+    <Slide
+      direction="up"
+      ref={ref}
+      {...props}
+    />
+  );
 });
 
 const initialValues = {
@@ -43,7 +49,7 @@ export const AsignarRuta = () => {
   const [open, setOpen] = useState(false);
 
   const { rutasPendientes } = useSelector(
-    (state: { rutas: RutasState }) => state.rutas
+    (state: { rutas: RutasState }) => state.rutas,
   );
 
   const { user } = useSelector((state: { auth: AuthState }) => state.auth);
@@ -86,7 +92,7 @@ export const AsignarRuta = () => {
             TransitionComponent={Transition}
             keepMounted
             disableEscapeKeyDown
-            onClose={(event, reason) => {
+            onClose={(_event, reason) => {
               if (reason === "backdropClick") return;
               handleClose();
             }}
@@ -102,7 +108,7 @@ export const AsignarRuta = () => {
                     await asignarRuta(
                       selected.map((s) => s.id),
                       values.rutaId,
-                      setErrors
+                      setErrors,
                     );
                     resetForm();
                     handleClose();
@@ -110,7 +116,10 @@ export const AsignarRuta = () => {
                 >
                   {({ setFieldValue, errors, touched, values, resetForm }) => (
                     <Form>
-                      <FormControl fullWidth sx={{ mb: 2 }}>
+                      <FormControl
+                        fullWidth
+                        sx={{ mb: 2 }}
+                      >
                         <FormLabel htmlFor="rutaId">Ruta</FormLabel>
 
                         <Autocomplete
@@ -123,7 +132,7 @@ export const AsignarRuta = () => {
                           }
                           value={
                             rutasPendientes.find(
-                              (r) => r.id == values.rutaId
+                              (r) => r.id == values.rutaId,
                             ) || null
                           }
                           renderInput={(params) => (
@@ -137,8 +146,16 @@ export const AsignarRuta = () => {
                         />
                       </FormControl>
 
-                      <Box display="flex" gap={2} flexDirection="column">
-                        <Button type="submit" fullWidth variant="contained">
+                      <Box
+                        display="flex"
+                        gap={2}
+                        flexDirection="column"
+                      >
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                        >
                           Crear
                         </Button>
 

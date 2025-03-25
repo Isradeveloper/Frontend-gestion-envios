@@ -20,9 +20,15 @@ const Transition = forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
   },
-  ref: React.Ref<unknown>
+  ref: React.Ref<unknown>,
 ) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return (
+    <Slide
+      direction="up"
+      ref={ref}
+      {...props}
+    />
+  );
 });
 
 interface ModalWithFormikProps {
@@ -32,7 +38,7 @@ interface ModalWithFormikProps {
   validationSchema: Yup.AnySchema;
   onCreate: (
     values: Record<string, unknown>,
-    setErrors: SetErrors
+    setErrors: SetErrors,
   ) => Promise<void>;
 }
 
@@ -68,7 +74,7 @@ const ModalWithFormik = ({
         keepMounted
         aria-describedby="alert-dialog-slide-description"
         disableEscapeKeyDown
-        onClose={(event, reason) => {
+        onClose={(_event, reason) => {
           if (reason === "backdropClick") return;
           handleClose();
         }}
@@ -86,7 +92,10 @@ const ModalWithFormik = ({
           >
             {({ errors, touched }) => (
               <Form>
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="nombre">Nombre</FormLabel>
                   <Field
                     as={TextField}
@@ -99,7 +108,10 @@ const ModalWithFormik = ({
                     helperText={<ErrorMessage name="nombre" />}
                   />
                 </FormControl>
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="cedula">Cédula</FormLabel>
                   <Field
                     as={TextField}
@@ -112,7 +124,11 @@ const ModalWithFormik = ({
                     helperText={<ErrorMessage name="cedula" />}
                   />
                 </FormControl>
-                <Button type="submit" fullWidth variant="contained">
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                >
                   Crear
                 </Button>
               </Form>

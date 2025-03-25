@@ -21,9 +21,15 @@ const Transition = forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
   },
-  ref: React.Ref<unknown>
+  ref: React.Ref<unknown>,
 ) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return (
+    <Slide
+      direction="up"
+      ref={ref}
+      {...props}
+    />
+  );
 });
 
 interface ModalWithFormikProps {
@@ -33,7 +39,7 @@ interface ModalWithFormikProps {
   validationSchema: Yup.AnySchema;
   onCreate: (
     values: Record<string, unknown>,
-    setErrors: SetErrors
+    setErrors: SetErrors,
   ) => Promise<void>;
   vehiculos: { id: string; label: string }[];
   transportistas: { id: string; label: string }[];
@@ -73,7 +79,7 @@ const ModalWithFormik = ({
         keepMounted
         aria-describedby="alert-dialog-slide-description"
         disableEscapeKeyDown
-        onClose={(event, reason) => {
+        onClose={(_event, reason) => {
           if (reason === "backdropClick") return;
           handleClose();
         }}
@@ -91,7 +97,10 @@ const ModalWithFormik = ({
           >
             {({ setFieldValue, errors, touched, values, resetForm }) => (
               <Form>
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="vehiculoId">Vehículo</FormLabel>
                   <Autocomplete
                     options={vehiculos}
@@ -113,7 +122,10 @@ const ModalWithFormik = ({
                   />
                 </FormControl>
 
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="transportistaId">Transportista</FormLabel>
                   <Autocomplete
                     options={transportistas}
@@ -123,7 +135,7 @@ const ModalWithFormik = ({
                     }
                     value={
                       transportistas.find(
-                        (v) => v.id == values.transportistaId
+                        (v) => v.id == values.transportistaId,
                       ) || null
                     }
                     renderInput={(params) => (
@@ -140,7 +152,10 @@ const ModalWithFormik = ({
                   />
                 </FormControl>
 
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="origen">Origen</FormLabel>
                   <Field
                     as={TextField}
@@ -154,7 +169,10 @@ const ModalWithFormik = ({
                   />
                 </FormControl>
 
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="destino">Destino</FormLabel>
                   <Field
                     as={TextField}
@@ -168,8 +186,16 @@ const ModalWithFormik = ({
                   />
                 </FormControl>
 
-                <Box display="flex" gap={2} flexDirection="column">
-                  <Button type="submit" fullWidth variant="contained">
+                <Box
+                  display="flex"
+                  gap={2}
+                  flexDirection="column"
+                >
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                  >
                     Crear
                   </Button>
 

@@ -21,8 +21,8 @@ export const useTransportistas = () => {
   });
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
+    _event: React.ChangeEvent<unknown>,
+    value: number,
   ) => {
     setParams((prev) => ({
       ...prev,
@@ -56,7 +56,7 @@ export const useTransportistas = () => {
   >({});
 
   const { transportistas, total } = useSelector(
-    (state: { transportistas: TransportistasState }) => state.transportistas
+    (state: { transportistas: TransportistasState }) => state.transportistas,
   );
 
   const getTransportistas = async (params: GetTransportistasParams) => {
@@ -74,13 +74,13 @@ export const useTransportistas = () => {
           transportistas: response.items,
           total: response.total,
           params,
-        })
+        }),
       );
       dispatch(
         showAlert({
           message: "Envíos obtenidos exitosamente",
           severity: "success",
-        })
+        }),
       );
 
       return response;
@@ -98,7 +98,7 @@ export const useTransportistas = () => {
 
   const createTransportista = async (
     transportista: Record<string, unknown>,
-    setErrors?: SetErrors
+    setErrors?: SetErrors,
   ) => {
     try {
       dispatch(showBackdrop());
@@ -114,7 +114,7 @@ export const useTransportistas = () => {
         showAlert({
           message: "Transportista creado exitosamente",
           severity: "success",
-        })
+        }),
       );
 
       getTransportistas(params);

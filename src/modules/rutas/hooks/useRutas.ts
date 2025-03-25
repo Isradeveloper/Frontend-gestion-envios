@@ -33,18 +33,18 @@ export const useRutas = () => {
     Record<string, string[]>
   >({});
   const { rutas, total } = useSelector(
-    (state: { rutas: RutasState }) => state.rutas
+    (state: { rutas: RutasState }) => state.rutas,
   );
   const { maestroVehiculos } = useSelector(
-    (state: { vehiculos: VehiculosState }) => state.vehiculos
+    (state: { vehiculos: VehiculosState }) => state.vehiculos,
   );
   const { maestroTransportistas } = useSelector(
-    (state: { transportistas: TransportistasState }) => state.transportistas
+    (state: { transportistas: TransportistasState }) => state.transportistas,
   );
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
+    _event: React.ChangeEvent<unknown>,
+    value: number,
   ) => {
     setParamsSafely({ ...params, page: value });
   };
@@ -71,7 +71,7 @@ export const useRutas = () => {
       if (!response || !response.items)
         throw new Error("No se pudieron obtener las rutas.");
       dispatch(
-        setRutas({ rutas: response.items, total: response.total, params })
+        setRutas({ rutas: response.items, total: response.total, params }),
       );
     } catch (err) {
       onError({ dispatch, error: err, setValidationErrors });
@@ -82,7 +82,7 @@ export const useRutas = () => {
 
   const createRuta = async (
     ruta: Record<string, unknown>,
-    setErrors?: SetErrors
+    setErrors?: SetErrors,
   ) => {
     try {
       dispatch(showBackdrop());
@@ -90,7 +90,7 @@ export const useRutas = () => {
       const response = await rutasService.createRuta(ruta);
       if (!response) throw new Error("No se pudo crear la ruta.");
       dispatch(
-        showAlert({ message: "Ruta creada exitosamente", severity: "success" })
+        showAlert({ message: "Ruta creada exitosamente", severity: "success" }),
       );
       getRutas(params);
     } catch (err) {
@@ -110,7 +110,7 @@ export const useRutas = () => {
         showAlert({
           message: "Estado de la ruta cambiado exitosamente",
           severity: "success",
-        })
+        }),
       );
       getRutas(params);
     } catch (err) {
@@ -128,7 +128,7 @@ export const useRutas = () => {
       if (!transportistas)
         throw new Error("No se pudieron obtener los transportistas.");
       dispatch(
-        setMaestroTransportistas({ maestroTransportistas: transportistas })
+        setMaestroTransportistas({ maestroTransportistas: transportistas }),
       );
       const vehiculos = await vehiculosService.getMaestroVehiculos();
       if (!vehiculos) throw new Error("No se pudieron obtener los vehículos.");
@@ -141,9 +141,9 @@ export const useRutas = () => {
   };
 
   const onChangeAutoComplete = (
-    event: React.SyntheticEvent,
+    _event: React.SyntheticEvent,
     newValue: string | null,
-    name: string
+    name: string,
   ) => {
     setValues((prev) => ({
       ...prev,

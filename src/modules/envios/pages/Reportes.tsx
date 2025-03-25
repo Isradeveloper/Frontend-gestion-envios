@@ -36,7 +36,7 @@ const ReportsPage = () => {
       field: "created_at",
       headerName: "Fecha de creación",
       width: 150,
-      valueGetter: (value, row) =>
+      valueGetter: (_value, row) =>
         new Date(row.created_at).toLocaleDateString(),
     },
     { field: "alto", headerName: "Alto (cm)", width: 120 },
@@ -46,21 +46,21 @@ const ReportsPage = () => {
       field: "volumen",
       headerName: "Volumen (cm3)",
       width: 150,
-      valueGetter: (value, row) => row.alto,
+      valueGetter: (_value, row) => row.alto,
     },
     { field: "peso", headerName: "Peso (kg)", width: 120 },
     {
       field: "transportista_nombre",
       headerName: "Conductor",
       width: 180,
-      valueGetter: (value, row) =>
+      valueGetter: (__value, row) =>
         row.transportista_id ? row.transportista_nombre : "---",
     },
     {
       field: "vehiculo_placa",
       headerName: "Vehículo",
       width: 150,
-      valueGetter: (value, row) => row.vehiculo_placa || "---",
+      valueGetter: (_value, row) => row.vehiculo_placa || "---",
     },
     {
       field: "ultimo_estado",
@@ -81,35 +81,67 @@ const ReportsPage = () => {
 
   return (
     <div style={{ padding: 20 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography
+        variant="h4"
+        gutterBottom
+      >
         Reportes
       </Typography>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6} lg={3}>
+      <Grid
+        container
+        spacing={2}
+      >
+        <Grid
+          item
+          xs={12}
+          md={6}
+          lg={3}
+        >
           <Paper style={{ padding: 16, height: "300px", position: "relative" }}>
             <ReporteEnviosPorEstado data={reporte} />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6} lg={3}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          lg={3}
+        >
           <Paper style={{ padding: 16, height: "300px", position: "relative" }}>
             <ReporteEnviosCompletadosTransportista data={reporte} />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6} lg={3}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          lg={3}
+        >
           <Paper style={{ padding: 16, height: "300px", position: "relative" }}>
             <ReportePromedioEntregaPorTransportista data={reporte} />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6} lg={3}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          lg={3}
+        >
           <Paper style={{ padding: 16, height: "300px", position: "relative" }}>
             <ReporteVolumenPesoPorVehiculo data={reporte} />
           </Paper>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+        >
           <Paper style={{ padding: 16 }}>
-            <Typography variant="h6" gutterBottom>
+            <Typography
+              variant="h6"
+              gutterBottom
+            >
               Detalles de envíos
             </Typography>
 

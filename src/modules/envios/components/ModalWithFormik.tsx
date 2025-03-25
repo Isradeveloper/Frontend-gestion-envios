@@ -20,9 +20,15 @@ import AddressAutocomplete from "../../common/components/AddressAutocomplete";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: React.ReactElement },
-  ref: React.Ref<unknown>
+  ref: React.Ref<unknown>,
 ) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return (
+    <Slide
+      direction="up"
+      ref={ref}
+      {...props}
+    />
+  );
 });
 
 interface ModalWithFormikProps {
@@ -32,7 +38,7 @@ interface ModalWithFormikProps {
   validationSchema: Yup.AnySchema;
   onCreate: (
     values: Record<string, unknown>,
-    setErrors: SetErrors
+    setErrors: SetErrors,
   ) => Promise<void>;
 }
 
@@ -71,7 +77,7 @@ const ModalWithFormik = ({
         TransitionComponent={Transition}
         keepMounted
         disableEscapeKeyDown
-        onClose={(event, reason) => {
+        onClose={(_event, reason) => {
           if (reason === "backdropClick") return;
           handleClose();
         }}
@@ -90,7 +96,10 @@ const ModalWithFormik = ({
           >
             {({ errors, touched, setFieldValue }) => (
               <Form>
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="tipoProducto">Tipo de producto</FormLabel>
                   <Field
                     as={TextField}
@@ -108,11 +117,17 @@ const ModalWithFormik = ({
                     setFieldValue("direccion", address.display_name)
                   }
                 />
-                <Typography variant="subtitle2" color="error">
+                <Typography
+                  variant="subtitle2"
+                  color="error"
+                >
                   <ErrorMessage name="direccion" />
                 </Typography>
 
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="alto">Alto (cm)</FormLabel>
                   <Field
                     as={TextField}
@@ -127,7 +142,10 @@ const ModalWithFormik = ({
                 </FormControl>
 
                 {/* Ancho */}
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="ancho">Ancho (cm)</FormLabel>
                   <Field
                     as={TextField}
@@ -142,7 +160,10 @@ const ModalWithFormik = ({
                 </FormControl>
 
                 {/* Largo */}
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="largo">Largo (cm)</FormLabel>
                   <Field
                     as={TextField}
@@ -156,7 +177,10 @@ const ModalWithFormik = ({
                   />
                 </FormControl>
 
-                <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormControl
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
                   <FormLabel htmlFor="peso">Peso (kg)</FormLabel>
                   <Field
                     as={TextField}
@@ -170,7 +194,11 @@ const ModalWithFormik = ({
                   />
                 </FormControl>
 
-                <Button type="submit" fullWidth variant="contained">
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                >
                   Crear
                 </Button>
               </Form>

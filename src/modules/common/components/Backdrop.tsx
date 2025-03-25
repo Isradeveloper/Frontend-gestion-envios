@@ -6,13 +6,13 @@ import { useDispatch } from "react-redux";
 export const CustomBackdrop = () => {
   const { open } = useSelector(
     (state: { common: { backdrop: { open: boolean } } }) =>
-      state.common.backdrop
+      state.common.backdrop,
   );
   const dispatch = useDispatch();
 
   return (
     <Backdrop
-      sx={(theme) => ({ color: "#fff", zIndex: 99999 })}
+      sx={(_theme) => ({ color: "#fff", zIndex: 99999 })}
       open={open}
       onClick={() => dispatch(hideBackdrop())}
     >

@@ -33,8 +33,8 @@ export const useEnvios = () => {
   });
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
+    _event: React.ChangeEvent<unknown>,
+    value: number,
   ) => {
     setParams((prev) => ({
       ...prev,
@@ -50,9 +50,9 @@ export const useEnvios = () => {
   };
 
   const onChangeAutoComplete = (
-    event: React.SyntheticEvent,
+    _event: React.SyntheticEvent,
     newValue: string | null,
-    name: string
+    name: string,
   ) => {
     setValues((prev) => ({
       ...prev,
@@ -117,7 +117,7 @@ export const useEnvios = () => {
           envios: response.items,
           total: response.total,
           params,
-        })
+        }),
       );
 
       return response;
@@ -148,7 +148,7 @@ export const useEnvios = () => {
         showAlert({
           message: "Rutas obtenidas exitosamente",
           severity: "success",
-        })
+        }),
       );
 
       return response;
@@ -185,7 +185,7 @@ export const useEnvios = () => {
 
   const createEnvio = async (
     envio: Record<string, unknown>,
-    setErrors?: SetErrors
+    setErrors?: SetErrors,
   ) => {
     try {
       dispatch(showBackdrop());
@@ -205,7 +205,7 @@ export const useEnvios = () => {
           message: `Envío creado exitosamente tu codigo de seguimiento es ${response.codigo} `,
           severity: "success",
           duration: 10000,
-        })
+        }),
       );
 
       await getEnvios(params);
@@ -229,7 +229,7 @@ export const useEnvios = () => {
   const asignarRuta = async (
     enviosIds: number[],
     rutaId: number,
-    setErrors?: SetErrors
+    setErrors?: SetErrors,
   ) => {
     try {
       dispatch(showBackdrop());
@@ -240,7 +240,7 @@ export const useEnvios = () => {
         showAlert({
           message: "Ruta asignada exitosamente",
           severity: "success",
-        })
+        }),
       );
       await getEnvios(params);
       asignarSeleccionados([]);
@@ -264,7 +264,7 @@ export const useEnvios = () => {
         showAlert({
           message: `Historial para el envío ${codigo} obtenido exitosamente`,
           severity: "success",
-        })
+        }),
       );
 
       return estados;
@@ -293,7 +293,7 @@ export const useEnvios = () => {
         showAlert({
           message: `Reporte obtenido exitosamente`,
           severity: "success",
-        })
+        }),
       );
 
       return reporte;

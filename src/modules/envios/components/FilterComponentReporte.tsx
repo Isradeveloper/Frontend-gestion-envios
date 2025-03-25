@@ -15,7 +15,7 @@ interface FilterProps {
   onChangeAutoComplete: (
     event: React.SyntheticEvent,
     newValue: string | null,
-    name: string
+    name: string,
   ) => void;
   transportistas: TransportistaMaestro[];
   vehiculos: VehiculoMaestro[];
@@ -70,16 +70,20 @@ export const FilterComponentReporte = ({
         getOptionLabel={(option) => option.label}
         onChange={(
           event: React.SyntheticEvent,
-          newValue: { label: string; value: number } | null
+          newValue: { label: string; value: number } | null,
         ) => {
           onChangeAutoComplete(
             event,
             newValue?.value.toString() || null,
-            "vehiculoId"
+            "vehiculoId",
           );
         }}
         renderInput={(params) => (
-          <TextField {...params} label="Vehiculo" size="medium" />
+          <TextField
+            {...params}
+            label="Vehiculo"
+            size="medium"
+          />
         )}
       />
       <Autocomplete
@@ -91,38 +95,35 @@ export const FilterComponentReporte = ({
         getOptionLabel={(option) => option.label}
         onChange={(
           event: React.SyntheticEvent,
-          newValue: { label: string; value: number } | null
+          newValue: { label: string; value: number } | null,
         ) => {
           onChangeAutoComplete(
             event,
             newValue?.value.toString() || null,
-            "transportistaId"
+            "transportistaId",
           );
         }}
         renderInput={(params) => (
-          <TextField {...params} label="Transportista" size="medium" />
+          <TextField
+            {...params}
+            label="Transportista"
+            size="medium"
+          />
         )}
       />
 
       <Autocomplete
-        options={estados.map((estado) => ({
-          label: estado.name,
-          value: estado.id,
-        }))}
-        sx={{ width: 200 }}
-        getOptionLabel={(option) => option.label}
-        onChange={(
-          event: React.SyntheticEvent,
-          newValue: { label: string; value: number } | null
-        ) => {
-          onChangeAutoComplete(
-            event,
-            newValue?.value.toString() || null,
-            "estado"
-          );
+        options={estados.map((estado) => estado.name)}
+        sx={{ width: 300 }}
+        onChange={(event: React.SyntheticEvent, newValue: string | null) => {
+          onChangeAutoComplete(event, newValue, "estado");
         }}
         renderInput={(params) => (
-          <TextField {...params} label="Estado" size="medium" />
+          <TextField
+            {...params}
+            label="Estado"
+            size="medium"
+          />
         )}
       />
 

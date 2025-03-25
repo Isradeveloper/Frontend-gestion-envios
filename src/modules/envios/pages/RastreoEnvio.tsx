@@ -41,6 +41,8 @@ const transformEstados = (estados: EstadoEnvio[]) => {
   }));
 };
 
+const socketUrl = import.meta.env.VITE_API_URL;
+
 export default function RastreoEnvio() {
   const [codigo, setCodigo] = useState<string>("");
   const [socketCodigo, setSocketCodigo] = useState<string | null>(null);
@@ -50,7 +52,7 @@ export default function RastreoEnvio() {
   useEffect(() => {
     if (!socketCodigo) return;
 
-    const socket = io("http://localhost:3000");
+    const socket = io(socketUrl);
 
     socket.on(`envio-${socketCodigo}`, (envioActualizado: EstadoEnvio) => {
       setEstados((prev) => [...prev, envioActualizado]);
@@ -100,7 +102,11 @@ export default function RastreoEnvio() {
 
   return (
     <>
-      <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: "left" }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ mb: 4, textAlign: "left" }}
+      >
         Estados de Envíos
       </Typography>
 
@@ -112,7 +118,11 @@ export default function RastreoEnvio() {
           onChange={(e) => setCodigo(e.target.value)}
           fullWidth
         />
-        <Button variant="contained" color="primary" onClick={handleBuscar}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleBuscar}
+        >
           Buscar
         </Button>
       </Box>
@@ -124,7 +134,10 @@ export default function RastreoEnvio() {
             return (
               <TimelineItem key={index}>
                 <TimelineOppositeContent sx={{ flex: 0.2 }}>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                  >
                     {estado.fechaHora}
                   </Typography>
                 </TimelineOppositeContent>
@@ -164,7 +177,10 @@ export default function RastreoEnvio() {
                         mb: 1,
                       }}
                     >
-                      <Typography variant="h6" component="div">
+                      <Typography
+                        variant="h6"
+                        component="div"
+                      >
                         Envío {estado.id}
                       </Typography>
 
@@ -176,7 +192,10 @@ export default function RastreoEnvio() {
                     </Box>
 
                     {estado.ubicacion && (
-                      <Typography variant="body2" sx={{ mb: 0.5 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ mb: 0.5 }}
+                      >
                         <strong>Ubicación:</strong> {estado.ubicacion}
                       </Typography>
                     )}
